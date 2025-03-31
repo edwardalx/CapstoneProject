@@ -12,6 +12,6 @@ Defining Model Relationships: Structuring the models for properties, tenants, an
 Migrations Issues: Some migration conflicts occurred due to changes in the model structure. I resolved this by rolling back and reapplying the migrations systematically.
 
 
-3. What’s Next? (Plan for Week 2)
+3. What’s Next? (Plan for Week 3)
 Set up API endpoints using Django REST Framework for tenants, properties, and payments.
 Begin working on the frontend integration plan to determine how users will interact with the system.

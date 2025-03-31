@@ -1,0 +1,36 @@
+{% extends 'rent_in_app/base.html' %}
+{% block title %}Tenant Registration{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Tenant Registration</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" enctype="multipart/form-data" class="card p-4 shadow">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_phone_no" class="form-label">Phone Number</label>
+                    {{ form.phone_no }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_id_image" class="form-label">ID Image</label>
+                    {{ form.id_image }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_first_name" class="form-label">First Name</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_last_name" class="form-label">Last Name</label>
+                    {{ form.last_name }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_email" class="form-label">Email</label>
+                    {{ form.email }}
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
