@@ -5,6 +5,8 @@ class TenantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tenant
         feilds = '__all__'
+    def get_full_name(self, obj):
+        return obj.first_name + " "+ obj.last_name
 
 class PropertySerializer(serializers.ModelSerializer):
     class Meta:
