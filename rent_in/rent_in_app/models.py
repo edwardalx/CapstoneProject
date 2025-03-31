@@ -1,8 +1,7 @@
+
 from django.db import models
 from dateutil.relativedelta import relativedelta
-from django.contrib.auth.models import User,AbstractUser,Group,Permission,BaseUserManager
-
-
+from django.contrib.auth.models import User,AbstractUser,BaseUserManager
 
 # Create your models here.
 class TenantUserManager(BaseUserManager):
@@ -19,28 +18,16 @@ class TenantUserManager(BaseUserManager):
                 return user
 class Tenant(AbstractUser):
     phone_no = models.CharField(max_length=11, primary_key=True, blank=False, unique= True)
-    username = None
-
-
-    objects=TenantUserManager()
+    
     USERNAME_FIELD = "phone_no"
     REQUIRED_FIELDS = ["first_name","last_name","email"]
-    groups = models.ManyToManyField(Group, related_name="customer_groups", blank=True)
-    user_permissions = models.ManyToManyField(Permission, related_name="customer_permissions", blank=True)
-
-    def __str__(self):
-        return f"Phone Number: {self.phone_no}  Name: {self.first_name}"
-
 
 class Property(models.Model):
     name = models.CharField(max_length=200, blank=False, null= False, unique= True)
     location = models.CharField(max_length=200, blank=False, null= False)
-    no_of_units = models.IntegerField(blank=True, null= True)
-    cost_of_rent = models.IntegerField(blank=True, null= True)
-    availability = models.BooleanField(blank=False, null= False)
-
-    def __str__(self):
-        return f"Property: {self.name} Average Cost of a Room: {self.cost_of_rent} "
+    no_of_units = models.IntegerField(max_length=3, blank=True, null= True)
+    cost_of_rent = models.IntegerField(max_length=10, blank=True, null= True)
+    availability = models.IntegerField(max_length=1, blank=False, null= False)
 
 
 class Tenancy_Agreement(models.Model):
@@ -51,9 +38,6 @@ class Tenancy_Agreement(models.Model):
     property_name = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='tenancy_agreement')
     room_number = models.CharField(max_length=14, blank=False, null= False)
 
-    def __str__(self):
-        return f"Property Name: {self.property_name}  Start: {self.contract_start_date }  End: {self.contact_end_date}"
-
 
 
 
@@ -61,4 +45,30 @@ class Tenancy_Agreement(models.Model):
         if self.contract_start_date and self.contract_duration:
             self.contact_end_date = self.contract_start_date + relativedelta(months=self.contract_duration)
         super().save(*args,**kwargs)
+    
+    def __str__(self):
+        return f"Tenant:{self.phone_no.first_name} Contract End: {self.contact_end_date}'Amount Left:{self.amount_left}"
+
+
+
+class Payment(models.Model):
+    phone_no = models.ForeignKey(Tenant, on_delete=models.CASCADE, related_name='payments')
+    tenancy_agreement = models.ForeignKey(Tenancy_Agreement, on_delete=models.CASCADE, related_name='payments')
+    amount_paid = models.IntegerField(blank=True, null=True)
+    amount_left = models.IntegerField(blank=True, null=True)
+    total_amount_paid = models.IntegerField(blank=True, null=True)
+    first_payment_date = models.DateField(auto_now=True)
+    last_payment_date = models.DateField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        self.total_amount_paid = self.tenancy_agreement.payments.aggregate(models.Sum('amount_paid'))['amount_paid__sum']
+        self.amount_left =  self.tenancy_agreement.room_number.cost - self.total_amount_paid 
+        super().save(*args, **kwargs)
+        # Update the Tenancy_Agreement's amount_paid after saving the payment
+       
+        self.tenancy_agreement.total_amount_paid = self.total_amount_paid 
+        self.tenancy_agreement.save()
+    def __str__(self):
+        return f"{self.phone_no.first_name} Amount Paid: {self.amount_paid} 'Amount Left:{self.amount_left}"
+
 
