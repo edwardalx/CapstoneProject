@@ -1,10 +1,11 @@
 
 from django.urls import path
-from .views import RentInHome,RentInRegisterVIew
+from .views import RentInHome,RentInRegisterVIew,TenantLoginView,register_view, tenant_login_view
 from django.contrib.auth import views
 
 urlpatterns=[
     path('', view=RentInHome.as_view(), name='home'),
-    path('login/', view=views.LoginView.as_view(template_name = 'rent_in_app/login.html'), name='login'),
+    path('login/', view=tenant_login_view, name='login'),
     path('register/', view=RentInRegisterVIew.as_view(), name='register' )
+
 ]

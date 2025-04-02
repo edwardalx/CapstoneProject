@@ -7,16 +7,21 @@
     <div class="col-md-6">
         <div class="card shadow-sm p-4">
             <h2 class="text-center mb-4">Login</h2>
-            <form method="POST">
+            <form id="login-form" method="post" action="{% url 'login' %}">
                 {% csrf_token %}
+                {% for field in form %}
                 <div class="mb-3">
-                    <label for="phone_no" class="form-label">Phone Number</label>
-                    <input type="text" class="form-control" id="phone_no" name="phone_no" placeholder="Enter your phone number" required>
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger">
+                            {% for error in field.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
-                </div>
+            {% endfor %}            
                 <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
             <div class="text-center mt-3">

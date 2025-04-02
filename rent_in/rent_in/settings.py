@@ -132,3 +132,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'  # URL for accessing media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Folder where images are stored
 AUTH_USER_MODEL = 'rent_in_app.Tenant'
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+
+AUTHENTICATION_BACKENDS = [
+    'rent_in_app.backends.PhoneNoBackend'
+,  # Replace with the correct path
+    'django.contrib.auth.backends.ModelBackend',  # Fallback to default authentication
+]
