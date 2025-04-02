@@ -6,7 +6,7 @@
     <h2 class="text-center">Tenant Registration</h2>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form id="register-form" method="post" action="{% url 'register' %}" enctype="multipart/form-data" class="card p-4 shadow" onsubmit="return validateForm()">
+            <form method="post" enctype="multipart/form-data" class="card p-4 shadow">
                 {% csrf_token %}
                 
                 {% for field in form %}
@@ -28,37 +28,4 @@
         </div>
     </div>
 </div>
-
-<!-- JavaScript for Form Validation -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    console.log("Registration page loaded");
-
-    // Ensure the form is being detected
-    const registerForm = document.getElementById('register-form');
-    if (registerForm) {
-        registerForm.addEventListener('submit', function(event) {
-            console.log("Register form submitted");
-        });
-    }
-});
-
-// Basic client-side validation
-function validateForm() {
-    const phoneNo = document.getElementById('id_phone_no').value.trim();
-    const email = document.getElementById('id_email').value.trim();
-    
-    if (phoneNo === "") {
-        alert("Phone Number is required.");
-        return false;
-    }
-    
-    if (email === "" || !email.includes("@")) {
-        alert("Please enter a valid email address.");
-        return false;
-    }
-
-    return true;
-}
-</script>
 {% endblock %}

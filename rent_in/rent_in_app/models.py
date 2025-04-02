@@ -3,38 +3,39 @@ from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User,AbstractUser,Group,Permission,BaseUserManager
 
 # Create your models here.
-class TenantUserManager(BaseUserManager):
-    use_in_migrations = True
+# class TenantUserManager(BaseUserManager):
+#     use_in_migrations = True
 
-    def create_user(self, phone_no, password=None, **extra_fields):
-        if not phone_no:
-            raise ValueError("The given phone number must be set")
-        extra_fields.setdefault("is_staff", False)
-        extra_fields.setdefault("is_superuser", False)
-        user = self.model(phone_no=phone_no, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+#     def create_user(self, phone_no, password=None, **extra_fields):
+#         if not phone_no:
+#             raise ValueError("The given phone number must be set")
+#         extra_fields.setdefault("is_staff", False)
+#         extra_fields.setdefault("is_superuser", False)
+#         user = self.model(phone_no=phone_no, **extra_fields)
+#         user.set_password(password)
+#         user.save(using=self._db)
+#         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
-        """Allow superusers to log in with email instead of phone number"""
-        if not email:
-            raise ValueError("Superusers must have an email address")
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
+#     def create_superuser(self, email, password=None, **extra_fields):
+#         """Allow superusers to log in with email instead of phone number"""
+#         if not email:
+#             raise ValueError("Superusers must have an email address")
+#         extra_fields.setdefault("is_staff", True)
+#         extra_fields.setdefault("is_superuser", True)
 
-        user = self.model(phone_no="admin", email=self.normalize_email(email), **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+#         user = self.model(phone_no="admin", email=self.normalize_email(email), **extra_fields)
+#         user.set_password(password)
+#         user.save(using=self._db)
+#         return user
 class Tenant(AbstractUser):
     phone_no = models.CharField(max_length=11, primary_key=True, blank=False, unique=True)
     email = models.EmailField(unique=True, blank=False)
     id_image = models.ImageField(upload_to='properties_images/', blank=True, null=True)
     
     username = None  # Remove default username
-    objects = TenantUserManager()
-
+    # objects = TenantUserManager()
+    groups = models.ManyToManyField(Group, related_name="customer_groups", blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name="customer_permissions", blank=True)
     USERNAME_FIELD = "phone_no"
     REQUIRED_FIELDS = ["email", "first_name", "last_name"]
 
