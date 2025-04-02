@@ -4,8 +4,8 @@ from .models import Tenant, Property,Tenancy_Agreement
 
 # Register your models here.
 class TenantAdmin(UserAdmin):
-    list_display = ["phone_no", "email", "first_name", "last_name", "is_staff"]
-    ordering = ["phone_no"]
+    list_display = ["username", "email", "first_name", "last_name", "is_staff"]
+    ordering = ["username"]
 
-admin.site.register([Tenant,Property,Tenancy_Agreement])
+admin.site.register([Property,Tenancy_Agreement])
 

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rent_in_app',
+    'account',
     'rest_framework',
     'rest_framework.authtoken',
 ]
@@ -58,7 +59,7 @@ ROOT_URLCONF = 'rent_in.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR /'templates'],
+        'DIRS': [BASE_DIR /'rent_in_app/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,7 +122,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "rent_in_app",
+    BASE_DIR / "account",
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -131,12 +132,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'  # URL for accessing media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Folder where images are stored
-AUTH_USER_MODEL = 'rent_in_app.Tenant'
+AUTH_USER_MODEL = 'account.Tenant'
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
 AUTHENTICATION_BACKENDS = [
-    'rent_in_app.backends.PhoneNoBackend'
-,  # Replace with the correct path
+#     'account.backends.PhoneNoBackend'
+# ,  # Replace with the correct path
     'django.contrib.auth.backends.ModelBackend',  # Fallback to default authentication
 ]

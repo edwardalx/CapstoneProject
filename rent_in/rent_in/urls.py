@@ -21,8 +21,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('rent-in/', include('django.contrib.auth.urls')),
-    path('rent-in/', include('rent_in_app.urls'))
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('account/', include('account.urls')),
+    # path('rent-in/', include('rent_in_app.urls'))
 ]
 
 if settings.DEBUG:  # Only for development, not for production
